@@ -7,6 +7,9 @@ export default class RecipeList extends React.Component {
     recipe_list: [],
     selectedRecipe: null
   };
+  componentWillMount = () => {
+
+  }
   newClick = (e) => {
     this.setState( { goRecipe: true,
       selectedRecipe: { created: new Date(), name:"", ingredients: [], instructions: []}
@@ -31,7 +34,7 @@ export default class RecipeList extends React.Component {
           }} />
       );
     }
-    const recipe_list = this.state.recipe_list.map( function( recipe, ndx){
+    const recipe_list = this.state.recipe_list.map( ( recipe, ndx) => {
       return (
         <ListItem key={ndx} itemClicked={this.listClicked}
           item_id={recipe.name} item_text={recipe.name} deleteClicked={this.deleteClicked} />
@@ -39,10 +42,14 @@ export default class RecipeList extends React.Component {
     });
     return (
       <div>
-        <button type="button" onClick={this.newClick}>New</button>
-        <ul>
-          {recipe_list}
-        </ul>
+        <div>
+          <button type="button" onClick={this.newClick}>New</button>
+        </div>
+        <div>
+          <ul>
+            {recipe_list.length?recipe_list:"no recipes"}
+          </ul>
+        </div>
       </div>
     );
   };

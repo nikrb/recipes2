@@ -16,14 +16,11 @@ class App extends Component {
               </ul>
             </div>
             <hr/>
+            <h2>Mum's Recipes</h2>
             <Route exact path="/" component={RecipeList}/>
             <Route path="/recipe" component={Recipe} />
           </div>
         </Router>
-        <div className="App-header">
-          <h2>Mum's Recipes</h2>
-        </div>
-        <RecipeList />
       </div>
     );
   };
