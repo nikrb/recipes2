@@ -1,0 +1,7 @@
+.close_button {
+  text-decoration: none;
+}
+
+.close_button:hover {
+  color:red;
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import './ListItem.css';
 
 export default class ListItem extends React.Component {
   handleClick = () => {
@@ -12,7 +13,7 @@ export default class ListItem extends React.Component {
   render = () => {
     return (
       <li onClick={this.handleClick} >
-        <a href='' onClick={this.deleteClicked} >&#10060;</a>
+        <a href='' onClick={this.deleteClicked} className="close_button">&#10060;</a>
         {this.props.item_text}
       </li>
     );
