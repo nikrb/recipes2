@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import RecipeList from './RecipeList.js';
+import RecipeList from './RecipeList';
+import Recipe from './Recipe';
 import './App.css';
 
 class App extends Component {
@@ -16,6 +17,7 @@ class App extends Component {
             </div>
             <hr/>
             <Route exact path="/" component={RecipeList}/>
+            <Route path="/recipe" component={Recipe} />
           </div>
         </Router>
         <div className="App-header">
