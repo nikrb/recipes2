@@ -1,5 +1,5 @@
 // Set this to true for production
-var doCache = false;
+var doCache = true;
 
 // Name our cache
 var CACHE_NAME = 'recipes-cache-v1';
@@ -32,7 +32,6 @@ self.addEventListener('install', function(event) {
           // This is because webpack hashes it
           fetch("asset-manifest.json")
             .then((response) => {
-              console.log( "asset response:", response.json());
               return response.json();
             })
             .then(assets => {
@@ -42,7 +41,8 @@ self.addEventListener('install', function(event) {
               // We could also cache any static assets like CSS or images
               const urlsToCache = [
                 "/",
-                assets["main.js"]
+                assets["main.js"],
+                assets["main.css"]
               ]
               cache.addAll(urlsToCache)
               console.log('cached');
