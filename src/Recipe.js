@@ -12,7 +12,7 @@ export default class Recipe extends React.Component {
   };
   dirty = false;
   componentWillMount = () => {
-    console.log( "Recipe mount:", this.props.location.state);
+    console.log( "Recipe mount:", this.props.location.state.recipe);
     const { id, name, created, ingredients, instructions} = this.props.location.state.recipe;
     // FIXME: I think we can remove the duplication
     this.setState( {
@@ -24,12 +24,11 @@ export default class Recipe extends React.Component {
     });
   };
   componentWillUnmount = () => {
-    const { name, created, ingredients, instructions} = this.state;
-    console.log( RecipeActions);
+    const { id, name, created, ingredients, instructions} = this.state;
     if( this.dirty){
-      RecipeActions.updateRecipe( { name,created,ingredients,instructions })
+      RecipeActions.updateRecipe( { id, name,created,ingredients,instructions })
       .then( (result) => {
-        console.log( "update recipe:", result);
+        console.log( "update recipe (id):", result);
       });
     }
   };

@@ -18,7 +18,14 @@ export default class RecipeList extends React.Component {
   };
   componentWillMount = () => {
     this.getRecipeList();
-  }
+    addEventListener( "recipe_update_complete", this.handleRecipeUpdateComplete);
+  };
+  componentWillUnmount = () => {
+    removeEventListener( "recipe_update_complete", this.handleRecipeUpdateComplete);
+  };
+  handleRecipeUpdateComplete = () => {
+    this.getRecipeList();
+  };
   newClick = (e) => {
     this.selectedRecipe = { created: new Date(), name:"", ingredients: [], instructions: []};
     this.setState( { goRecipe: true});
