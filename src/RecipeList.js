@@ -1,6 +1,7 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import ListItem from './ListItem';
+import RecipeActions from './RecipeActions';
 
 export default class RecipeList extends React.Component {
   state = {
@@ -8,6 +9,11 @@ export default class RecipeList extends React.Component {
     selectedRecipe: null
   };
   componentWillMount = () => {
+    RecipeActions.getAll()
+    .then( (results) => {
+      console.log( "recipe list loaded:", results);
+      this.setState( {recipe_list: results});
+    });
 
   }
   newClick = (e) => {
@@ -47,7 +53,7 @@ export default class RecipeList extends React.Component {
         </div>
         <div>
           <ul>
-            {recipe_list.length?recipe_list:"no recipes"}
+            {recipe_list}
           </ul>
         </div>
       </div>

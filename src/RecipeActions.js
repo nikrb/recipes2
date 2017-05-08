@@ -4,13 +4,9 @@ const db = new Dexie( "recipes");
 db.version(1).stores({
   recipes: "++id, name"
 });
-let recipe_list = [];
-const getRecipes = () => {
-  db.recipes.toArray()
-  .then( (docs) => {
-    this.setState( { recipe_list: docs});
-  });
-  return recipe_list.map( (recipe) => { return recipe;});
+
+const getAll = () => {
+  return db.recipes.toArray();
 };
 const updateRecipe = ( recipe) => {
   console.log( "@RecipeActions.updateRecipe");
@@ -23,5 +19,5 @@ const updateRecipe = ( recipe) => {
   return ret;
 };
 
-const RecipeActions = { getRecipes, updateRecipe};
+const RecipeActions = { getAll, updateRecipe};
 export default RecipeActions;
