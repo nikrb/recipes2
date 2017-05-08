@@ -10,6 +10,7 @@ export default class Recipe extends React.Component {
     ingredients: [],
     instructions: ""
   };
+  dirty = false;
   componentWillMount = () => {
     console.log( "Recipe mount:", this.props.location.state);
     const { id, name, created, ingredients, instructions} = this.props.location.state.recipe;
@@ -25,15 +26,18 @@ export default class Recipe extends React.Component {
   componentWillUnmount = () => {
     const { name, created, ingredients, instructions} = this.state;
     console.log( RecipeActions);
-    RecipeActions.updateRecipe( { name,created,ingredients,instructions })
-    .then( (result) => {
-      console.log( "update recipe:", result);
-    });
+    if( this.dirty){
+      RecipeActions.updateRecipe( { name,created,ingredients,instructions })
+      .then( (result) => {
+        console.log( "update recipe:", result);
+      });
+    }
   };
   ingredientChange = (e) => {
     this.setState( { ingredient_entry: e.target.value});
   };
   addIngredient = () => {
+    this.dirty = true;
     this.setState( { ingredients: [...this.state.ingredients, {text: this.state.ingredient_entry}]});
   };
   handleKeyUp = (e) => {
@@ -50,9 +54,11 @@ export default class Recipe extends React.Component {
     console.log( "delete item:", item_id);
   };
   recipeNameChange = ( e) => {
+    this.dirty = true;
     this.setState( { name: e.target.value});
   };
   instructionChange = (e) => {
+    this.dirty = true;
     this.setState( { instructions: e.target.value});
   };
   render = () => {

@@ -6,29 +6,42 @@ import RecipeActions from './RecipeActions';
 export default class RecipeList extends React.Component {
   state = {
     recipe_list: [],
-    selectedRecipe: null
+    goRecipe: false
   };
-  componentWillMount = () => {
+  selectedRecipe = null;
+  getRecipeList = () => {
     RecipeActions.getAll()
     .then( (results) => {
       console.log( "recipe list loaded:", results);
       this.setState( {recipe_list: results});
     });
-
+  };
+  componentWillMount = () => {
+    this.getRecipeList();
   }
   newClick = (e) => {
-    this.setState( { goRecipe: true,
-      selectedRecipe: { created: new Date(), name:"", ingredients: [], instructions: []}
-    });
+    this.selectedRecipe = { created: new Date(), name:"", ingredients: [], instructions: []};
+    this.setState( { goRecipe: true});
   };
   listClicked = ( item_id) => {
-    const selectedRecipe = this.state.recipe_list.find( ( recipe) => {
+    this.selectedRecipe = this.state.recipe_list.find( ( recipe) => {
       return recipe.name === item_id;
     });
+    this.setState( { goRecipe: true});
   };
   deleteClicked = (item_id) => {
+    const newlist = this.state.recipe_list.filter( (recipe) => {
+      return recipe.name !== item_id;
+    });
+    this.setState( { recipe_list: newlist});
     const sel = this.state.recipe_list.filter( (recipe) => {
       return recipe.name === item_id;
+    });
+    console.log( "delete recipe:", sel[0]);
+    RecipeActions.deleteRecipe( sel[0].id)
+    .then( (res) => {
+      console.log( "recipe deleted response:", res);
+      this.getRecipeList();
     });
   };
   render = () => {
@@ -36,7 +49,7 @@ export default class RecipeList extends React.Component {
       return (
         <Redirect to={{
             pathname: "/recipe",
-            state: { recipe: this.state.selectedRecipe}
+            state: { recipe: this.selectedRecipe}
           }} />
       );
     }
