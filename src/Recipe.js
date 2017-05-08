@@ -1,8 +1,10 @@
 import React from 'react';
 import ListItem from './ListItem';
+import RecipeActions from './RecipeActions';
 
 export default class Recipe extends React.Component {
   state = {
+    id: 0,
     name : "",
     ingredient_entry: "",
     ingredients: [],
@@ -10,17 +12,23 @@ export default class Recipe extends React.Component {
   };
   componentWillMount = () => {
     console.log( "Recipe mount:", this.props.location.state);
-    const { name, created, ingredients, instructions} = this.props.location.state.recipe;
+    const { id, name, created, ingredients, instructions} = this.props.location.state.recipe;
     // FIXME: I think we can remove the duplication
     this.setState( {
+      id: id,
       name: name,
-      create: created,
+      created: created,
       ingredients: ingredients,
       instructions: instructions
     });
   };
   componentWillUnmount = () => {
-
+    const { name, created, ingredients, instructions} = this.state;
+    console.log( RecipeActions);
+    RecipeActions.updateRecipe( { name,created,ingredients,instructions })
+    .then( (result) => {
+      console.log( "update recipe:", result);
+    });
   };
   ingredientChange = (e) => {
     this.setState( { ingredient_entry: e.target.value});
@@ -43,6 +51,9 @@ export default class Recipe extends React.Component {
   };
   recipeNameChange = ( e) => {
     this.setState( { name: e.target.value});
+  };
+  instructionChange = (e) => {
+    this.setState( { instructions: e.target.value});
   };
   render = () => {
     const ingredients = this.state.ingredients.map( ( ing, ndx) => {
@@ -67,6 +78,9 @@ export default class Recipe extends React.Component {
         </div>
         <div>
           <ul>{ingredients}</ul>
+        </div>
+        <div>
+          <textarea onChange={this.instructionChange} value={this.state.instructions}></textarea>
         </div>
       </div>
     );
