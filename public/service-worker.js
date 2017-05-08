@@ -1,5 +1,5 @@
 // Set this to true for production
-var doCache = true;
+var doCache = false;
 
 // Name our cache
 var CACHE_NAME = 'recipes-cache-v1';
@@ -56,6 +56,18 @@ self.addEventListener('install', function(event) {
 // if we have them
 self.addEventListener('fetch', function(event) {
     if (doCache) {
+      // if some condition
+      // always go to network first, then cache results
+      // e.respondWith(
+      //   caches.open(dataCacheName).then(function(cache) {
+      //     return fetch(e.request).then(function(response){
+      //       cache.put(e.request.url, response.clone());
+      //       return response;
+      //     });
+      //   })
+      // );
+      // else ...
+      // this is cache first, fallback network
       event.respondWith(
           caches.match(event.request).then(function(response) {
               return response || fetch(event.request);

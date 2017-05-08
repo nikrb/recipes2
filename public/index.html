@@ -9,7 +9,7 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <!-- Tell the browser it's a PWA -->
     <meta name="mobile-web-app-capable" content="yes">
-    
+
     <meta name="application-name" content="Recipes" >
     <!-- Make sure theme-color is defined -->
     <meta name="theme-color" content="#536878">
@@ -18,23 +18,5 @@
   </head>
   <body>
     <div id="root"><h1>Loading...</h1></div>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('service-worker.js').then(function(registration) {
-            // Registration was successful
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          }, function(err) {
-            // registration failed :(
-            console.log('ServiceWorker registration failed: ', err);
-          }).catch(function(err) {
-            console.log(err)
-          });
-        });
-      } else {
-        console.log('service worker is not supported');
-      }
-    </script>
-
   </body>
 </html>
