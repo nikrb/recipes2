@@ -51,6 +51,8 @@ export default class Recipe extends React.Component {
   listClicked = (e) => {};
   deleteClicked = ( item_id) => {
     console.log( "delete item:", item_id);
+    const nl = this.state.ingredients.filter( item => item.text !== item_id)
+    this.setState( { ingredients: nl});
   };
   recipeNameChange = ( e) => {
     this.dirty = true;
