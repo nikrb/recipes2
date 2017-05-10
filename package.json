@@ -1,0 +1,28 @@
+{
+  "name": "recipe-server",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "babel-cli": "6.14.0",
+    "babel-core": "6.14.0",
+    "body-parser": "^1.17.1",
+    "express": "4.13.3",
+    "mongodb": "^2.2.25"
+  },
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon --watch server --exec babel-node -- server/server.js",
+    "client": "babel-node start-client.js",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "concurrently": "^3.1.0",
+    "csv-parse": "^1.2.0",
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "14.1.0",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-jsx-a11y": "4.0.0",
+    "eslint-plugin-react": "6.9.0",
+    "nodemon": "^1.11.0"
+  }
+}
