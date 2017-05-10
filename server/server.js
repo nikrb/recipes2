@@ -60,14 +60,14 @@ app.post( '/api/recipes', (req, res) => {
   });
 });
 
-app.delete( '/api/recipes', (req, res) => {
-  const list = req.body;
-  const idlist = list.map( ( item) => { return ObjectId(item._id);});
-  db.collection( 'recipes').deleteMany(
-    { _id : { $in : idlist}}
-  )
-  .then( res.json( results));
-});
+// app.delete( '/api/recipes', (req, res) => {
+//   const list = req.body;
+//   const idlist = list.map( ( item) => { return ObjectId(item._id);});
+//   db.collection( 'recipes').deleteMany(
+//     { _id : { $in : idlist}}
+//   )
+//   .then( res.json( results));
+// });
 
 app.listen(app.get('port'), () => {
   console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
