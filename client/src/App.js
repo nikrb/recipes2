@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import RecipeList from './RecipeList';
 import Recipe from './Recipe';
-import RecipeActions from './RecipeActions';
 import './App.css';
 
 class App extends Component {
@@ -23,15 +22,7 @@ class App extends Component {
       console.log('service worker is not supported');
     }
   };
-  syncBackend = () => {
-    RecipeActions.syncBackend();
-  };
   render = () => {
-    const sync_style = {
-      fontSize: ".7em",
-      height: "2em",
-      padding: "3px"
-    };
     return (
       <div className="App">
         <Router>
@@ -40,7 +31,6 @@ class App extends Component {
               <ul>
                 <li><Link to="/">Home</Link></li>
               </ul>
-              <button type="button" style={sync_style} onClick={this.syncBackend} >Sync</button>
             </div>
             <hr/>
             <h2>Mum's Recipes</h2>

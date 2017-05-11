@@ -52,6 +52,9 @@ export default class RecipeList extends React.Component {
       this.getRecipeList();
     });
   };
+  syncBackend = () => {
+    RecipeActions.syncBackend();
+  };
   render = () => {
     if( this.state.goRecipe){
       return (
@@ -67,10 +70,16 @@ export default class RecipeList extends React.Component {
           item_id={recipe.name} item_text={recipe.name} deleteClicked={this.deleteClicked} />
       );
     });
+    const sync_style = {
+      fontSize: ".7em",
+      height: "2em",
+      padding: "3px"
+    };
     return (
       <div>
         <div>
           <button type="button" onClick={this.newClick}>New</button>
+          <button type="button" style={sync_style} onClick={this.syncBackend} >Sync</button>
         </div>
         <div>
           <ul>
