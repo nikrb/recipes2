@@ -2,7 +2,7 @@
 var doCache = false;
 
 // Name our cache
-var CACHE_NAME = 'recipes-cache-v1';
+var CACHE_NAME = 'recipes-cache-v2';
 
 // Delete old caches that are not our current one!
 self.addEventListener("activate", event => {
@@ -41,6 +41,7 @@ self.addEventListener('install', function(event) {
               // We could also cache any static assets like CSS or images
               const urlsToCache = [
                 "/",
+                "api/recipes",
                 assets["main.js"],
                 assets["main.css"]
               ]

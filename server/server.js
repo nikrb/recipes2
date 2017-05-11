@@ -35,7 +35,7 @@ app.use(function(req, res, next) {
 app.use( bodyParser.json());
 
 app.get( '/api/recipes', (req, res) => {
-  db.collection( 'recipes').find().sort( { created: -1})
+  db.collection( 'recipes').find( { deleteme : { $exists : false}}).sort( { name: 1})
   .toArray( function( err, items){
     res.json( items);
   });
@@ -45,17 +45,36 @@ app.post( '/api/recipes', (req, res) => {
   const list = req.body;
   let promises = [];
   list.forEach( ( recipe) => {
+    if( typeof recipe._id === "undefined") recipe._id = 0;
+    delete recipe.dirty; // clean now
+    delete recipe.id; // local id is no use
+    console.log( "***********recipe:", recipe);
     const p =  new Promise( (resolve, reject) => {
       db.collection( 'recipes').findOneAndReplace(
         { _id : ObjectId( recipe._id)},
-        { recipe},
-        { upsert: true}
+        { name : recipe.name,
+          ingredients: recipe.ingredients,
+          instructions: recipe.instructions
+        },
+        { projection: { _id, name, ingredients, instructions},
+          returnOriginal: false,
+          upsert: true
+        }
       )
-      .then( resolve( result));
+      .then( (result) => {
+        console.log( "udpate recipe result:", result);
+        resolve( result.value);
+      })
+      .catch( (error) => {
+        console.log( "recipe update failed:", error);
+        reject( error);
+      });
     });
-    promses.push( p);
+    promises.push( p);
   });
-  Promises.all( ( results) => {
+  console.log( `processing [${promises.length}]`);
+  Promise.all( promises).then(( results) => {
+    console.log( "post recipes all promises results:", results);
     res.json( results);
   });
 });

@@ -13,10 +13,12 @@ export default class RecipeList extends React.Component {
     RecipeActions.getAll()
     .then( (results) => {
       console.log( "recipe list loaded:", results);
-      this.setState( {recipe_list: results});
+      const nl = results.filter( ( r) => { return typeof r.deleteme === "undefined"; });
+      this.setState( {recipe_list: nl});
     });
   };
   componentWillMount = () => {
+    RecipeActions.syncBackend();
     this.getRecipeList();
     addEventListener( "recipe_update_complete", this.handleRecipeUpdateComplete);
   };
