@@ -12,23 +12,10 @@ const updateRecipe = ( recipe) => {
   console.log( "@RecipeActions.updateRecipe:", recipe);
   return db.recipes.put( {...recipe, dirty:true})
           .then( (res) => {
-            console.log( "update recipe finished:", res);
+            console.log( "@updateRecipe: update recipe finished:", res);
             dispatchEvent( new CustomEvent( "recipe_update_complete"));
             return res;
           });
-  // let ret = null;
-  // if( typeof recipe.id === "undefined" || recipe.id === 0){
-  //   const { created, name, ingredients, instructions} = recipe;
-  //   ret = db.recipes.add( { created, name, ingredients, instructions, dirty:true})
-  //     .then( (res) => {
-  //       dispatchEvent( new CustomEvent( "recipe_update_complete"));
-  //       // return the new objecct id for processing
-  //       return res;
-  //     });
-  // } else {
-  //   ret = db.recipes.update( recipe.id, {...recipe, dirty:true}).then( (res) => {return 0;});
-  // }
-  // return ret;
 };
 const deleteRecipe = ( recipe_id) => {
   return db.recipes.update( recipe_id, { deleteme: 1});
@@ -45,14 +32,14 @@ const syncLocalDB = () => {
   }).then( checkStatus)
     .then( parseJSON)
     .then( (response) => {
-      console.log( "recipe GET response:", response);
+      console.log( "@syncLocalDB: recipe GET response:", response);
       let promises = [];
       response.forEach( ( recipe) => {
         promises.push( db.recipes.put( recipe));
       });
       promises.push( db.recipes.where( "deleteme").aboveOrEqual( 1).delete());
       Dexie.Promise.all( promises).then( (results) => {
-        console.log( "sync local updates finished:", results);
+        console.log( "@syncLocalDB: updates finished:", results);
         dispatchEvent( new CustomEvent( "recipe_update_complete"));
       });
     });
@@ -64,7 +51,7 @@ const syncBackend = () => {
       return recipe.dirty === true || typeof recipe.deleteme !== "undefined";
     });
     if( upd.length){
-      console.log( "sync recipes:", upd);
+      console.log( "@syncBackend: updating:", upd);
       fetch( '/api/recipes', {
         method: 'post',
         headers: {
@@ -75,13 +62,13 @@ const syncBackend = () => {
       }).then( checkStatus)
         .then( parseJSON)
         .then( function( response){
-          console.log( "post recipe response:", response);
+          console.log( "@syncBackend: post updates response:", response);
           syncLocalDB();
       }).catch( (e) => {
-        console.error( "post recipe failed:", e);
+        console.error( "@syncBackend: post updates failed:", e);
       });
     } else {
-      console.log( "no recipes to sync");
+      console.log( "@syncBackend: no recipes to sync");
       syncLocalDB();
     }
   });
