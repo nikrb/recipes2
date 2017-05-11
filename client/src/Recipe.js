@@ -4,7 +4,7 @@ import RecipeActions from './RecipeActions';
 
 export default class Recipe extends React.Component {
   state = {
-    id: 0,
+    _id: "",
     name : "",
     ingredient_entry: "",
     ingredients: [],
@@ -12,11 +12,12 @@ export default class Recipe extends React.Component {
   };
   dirty = false;
   componentWillMount = () => {
+    this.dirty = false;
     console.log( "Recipe mount:", this.props.location.state.recipe);
-    const { id, name, created, ingredients, instructions} = this.props.location.state.recipe;
+    const { _id, name, created, ingredients, instructions} = this.props.location.state.recipe;
     // FIXME: I think we can remove the duplication
     this.setState( {
-      id: id,
+      _id: _id,
       name: name,
       created: created,
       ingredients: ingredients,
@@ -24,11 +25,11 @@ export default class Recipe extends React.Component {
     });
   };
   componentWillUnmount = () => {
-    const { id, name, created, ingredients, instructions} = this.state;
+    const { _id, name, created, ingredients, instructions} = this.state;
     if( this.dirty){
-      RecipeActions.updateRecipe( { id, name,created,ingredients,instructions })
+      RecipeActions.updateRecipe( { _id, name,created,ingredients,instructions })
       .then( (result) => {
-        console.log( "update recipe (id):", result);
+        console.log( "update recipe when leaving recipe detail (name):", result);
       });
     }
   };
@@ -51,6 +52,7 @@ export default class Recipe extends React.Component {
   listClicked = (e) => {};
   deleteClicked = ( item_id) => {
     console.log( "delete item:", item_id);
+    this.dirty = true;
     const nl = this.state.ingredients.filter( item => item.text !== item_id)
     this.setState( { ingredients: nl});
   };

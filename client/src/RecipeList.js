@@ -47,7 +47,7 @@ export default class RecipeList extends React.Component {
       return recipe.name === item_id;
     });
     console.log( "delete recipe:", sel[0]);
-    RecipeActions.deleteRecipe( sel[0].id)
+    RecipeActions.deleteRecipe( sel[0].name)
     .then( (res) => {
       console.log( "recipe deleted response:", res);
       this.getRecipeList();

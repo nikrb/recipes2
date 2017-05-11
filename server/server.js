@@ -40,41 +40,76 @@ app.get( '/api/recipes', (req, res) => {
     res.json( items);
   });
 });
+// TODO: remove testing
+// app.get( '/api/recipes', ( req, res) => {
+//   const {name} = req.query;
+//   console.log( `got name [${name}]`);
+//   let promises = [];
+//   let query_col = { name: name};
+//   const p = new Promise( (resolve, reject) => {
+//     db.collection( 'recipes').findOneAndUpdate(
+//       query_col,
+//       { name: name, instructions: "testing5"},
+//       { projection: { _id:1, name:1, instructions:1},
+//         upsert: true,
+//         returnOriginal: false
+//       }
+//     ).then( (result) => {
+//       console.log( "results:", result.value);
+//       resolve( result.value);
+//     }).catch( (error) => {
+//       console.log( "error:", error);
+//       reject( "failed");
+//     });
+//   });
+//   promises.push( p);
+//   Promise.all( promises).then( (results) => {
+//     console.log( "finished results:", results);
+//     res.send( results);
+//   })
+// });
 
 app.post( '/api/recipes', (req, res) => {
   const list = req.body;
   let promises = [];
   list.forEach( ( recipe) => {
-    if( typeof recipe._id === "undefined") recipe._id = 0;
     delete recipe.dirty; // clean now
-    delete recipe.id; // local id is no use
-    console.log( "***********recipe:", recipe);
-    const p =  new Promise( (resolve, reject) => {
-      db.collection( 'recipes').findOneAndReplace(
-        { _id : ObjectId( recipe._id)},
-        { name : recipe.name,
-          ingredients: recipe.ingredients,
-          instructions: recipe.instructions
-        },
-        { projection: { _id, name, ingredients, instructions},
-          returnOriginal: false,
-          upsert: true
-        }
-      )
-      .then( (result) => {
-        console.log( "udpate recipe result:", result);
-        resolve( result.value);
-      })
-      .catch( (error) => {
-        console.log( "recipe update failed:", error);
-        reject( error);
+    if( typeof recipe._id === "undefined" || recipe._id === ""){
+      console.log( "insert new recipe:", recipe);
+      const p = new Promise( (resolve, reject) => {
+        db.collection( 'recipes').insertOne( recipe)
+        .then( (result) => {
+          resolve( result);
+        })
       });
-    });
-    promises.push( p);
+      promises.push( p);
+    } else {
+      console.log( "replace recipe:", recipe);
+      const p =  new Promise( (resolve, reject) => {
+        db.collection( 'recipes').findOneAndReplace(
+          { _id: ObjectId( recipe._id)},
+          { created: recipe.created,
+            name : recipe.name,
+            ingredients: recipe.ingredients,
+            instructions: recipe.instructions
+          },
+          { projection: { _id:1, created:1, name:1, ingredients:1, instructions:1},
+            returnOriginal: false
+          }
+        )
+        .then( (result) => {
+          console.log( "udpate recipe result:", result);
+          resolve( result.value);
+        })
+        .catch( (error) => {
+          console.log( "recipe update failed:", error);
+          reject( error);
+        });
+      });
+      promises.push( p);
+    }
   });
-  console.log( `processing [${promises.length}]`);
   Promise.all( promises).then(( results) => {
-    console.log( "post recipes all promises results:", results);
     res.json( results);
   });
 });

@@ -2,7 +2,7 @@ import Dexie from 'dexie';
 
 const db = new Dexie( "recipes");
 db.version(1).stores({
-  recipes: "++id, name"
+  recipes: "name, deleteme"
 });
 
 const getAll = () => {
@@ -10,27 +10,32 @@ const getAll = () => {
 };
 const updateRecipe = ( recipe) => {
   console.log( "@RecipeActions.updateRecipe:", recipe);
-  let ret = null;
-  if( typeof recipe.id === "undefined" || recipe.id === 0){
-    const { created, name, ingredients, instructions} = recipe;
-    ret = db.recipes.add( { created, name, ingredients, instructions, dirty:true})
-      .then( (res) => {
-        dispatchEvent( new CustomEvent( "recipe_update_complete"));
-        // return the new objecct id for processing
-        return res;
-      });
-  } else {
-    ret = db.recipes.update( recipe.id, {...recipe, dirty:true}).then( (res) => {return 0;});
-  }
-  return ret;
+  return db.recipes.put( {...recipe, dirty:true})
+          .then( (res) => {
+            console.log( "update recipe finished:", res);
+            dispatchEvent( new CustomEvent( "recipe_update_complete"));
+            return res;
+          });
+  // let ret = null;
+  // if( typeof recipe.id === "undefined" || recipe.id === 0){
+  //   const { created, name, ingredients, instructions} = recipe;
+  //   ret = db.recipes.add( { created, name, ingredients, instructions, dirty:true})
+  //     .then( (res) => {
+  //       dispatchEvent( new CustomEvent( "recipe_update_complete"));
+  //       // return the new objecct id for processing
+  //       return res;
+  //     });
+  // } else {
+  //   ret = db.recipes.update( recipe.id, {...recipe, dirty:true}).then( (res) => {return 0;});
+  // }
+  // return ret;
 };
 const deleteRecipe = ( recipe_id) => {
-  // return db.recipes.where( "id").equals( recipe_id).delete();
-  return db.recipes.update( recipe_id, { deleteme: true});
+  return db.recipes.update( recipe_id, { deleteme: 1});
 };
 
-const refreshCache = () => {
-  console.log( "force cache refresh");
+const syncLocalDB = () => {
+  console.log( "@syncLocalDB");
   fetch( '/api/recipes', {
     method: 'get',
     headers: {
@@ -41,6 +46,15 @@ const refreshCache = () => {
     .then( parseJSON)
     .then( (response) => {
       console.log( "recipe GET response:", response);
+      let promises = [];
+      response.forEach( ( recipe) => {
+        promises.push( db.recipes.put( recipe));
+      });
+      promises.push( db.recipes.where( "deleteme").aboveOrEqual( 1).delete());
+      Dexie.Promise.all( promises).then( (results) => {
+        console.log( "sync local updates finished:", results);
+        dispatchEvent( new CustomEvent( "recipe_update_complete"));
+      });
     });
 };
 const syncBackend = () => {
@@ -49,22 +63,27 @@ const syncBackend = () => {
     let upd = recipes.filter( (recipe) => {
       return recipe.dirty === true || typeof recipe.deleteme !== "undefined";
     });
-    console.log( "sync recipes:", upd);
-    fetch( '/api/recipes', {
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify( upd)
-    })// .then( checkStatus)
-      // .then( parseJSON)
-      .then( function( response){
-        console.log( "post recipe response:", response);
-        refreshCache();
-    }).catch( (e) => {
-      console.error( "post recipe failed:", e);
-    });
+    if( upd.length){
+      console.log( "sync recipes:", upd);
+      fetch( '/api/recipes', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify( upd)
+      }).then( checkStatus)
+        .then( parseJSON)
+        .then( function( response){
+          console.log( "post recipe response:", response);
+          syncLocalDB();
+      }).catch( (e) => {
+        console.error( "post recipe failed:", e);
+      });
+    } else {
+      console.log( "no recipes to sync");
+      syncLocalDB();
+    }
   });
 };
 
