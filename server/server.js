@@ -40,34 +40,6 @@ app.get( '/api/recipes', (req, res) => {
     res.json( items);
   });
 });
-// TODO: remove testing
-// app.get( '/api/recipes', ( req, res) => {
-//   const {name} = req.query;
-//   console.log( `got name [${name}]`);
-//   let promises = [];
-//   let query_col = { name: name};
-//   const p = new Promise( (resolve, reject) => {
-//     db.collection( 'recipes').findOneAndUpdate(
-//       query_col,
-//       { name: name, instructions: "testing5"},
-//       { projection: { _id:1, name:1, instructions:1},
-//         upsert: true,
-//         returnOriginal: false
-//       }
-//     ).then( (result) => {
-//       console.log( "results:", result.value);
-//       resolve( result.value);
-//     }).catch( (error) => {
-//       console.log( "error:", error);
-//       reject( "failed");
-//     });
-//   });
-//   promises.push( p);
-//   Promise.all( promises).then( (results) => {
-//     console.log( "finished results:", results);
-//     res.send( results);
-//   })
-// });
 
 app.post( '/api/recipes', (req, res) => {
   const list = req.body;
