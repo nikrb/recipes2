@@ -6,12 +6,14 @@ import './App.css';
 
 class App extends Component {
   state = {
+    // font size in em times 10
     font_size : 10
   };
   componentWillMount = () => {
     const size = localStorage.getItem( 'font_size');
     if( size !== null){
-      this.setState( { font_size: size});
+      const ns = parseInt( size, 10);
+      this.setState( { font_size: ns});
     }
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
@@ -42,10 +44,14 @@ class App extends Component {
       fontSize: `${this.state.font_size/10}em`
     };
     const large_font = {
-      fontSize: ".9em"
+      fontSize: ".9em",
+      margin:"0",
+      padding:"2px"
     }
     const small_font = {
-      fontSize: ".6em"
+      fontSize: ".6em",
+      margin:"0",
+      padding:"2px"
     };
     return (
       <div className="App" style={app_style}>
