@@ -75,9 +75,14 @@ export default class RecipeList extends React.Component {
       height: "2em",
       padding: "3px"
     };
+    const button_bar = {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between"
+    }
     return (
       <div>
-        <div>
+        <div style={button_bar}>
           <button type="button" onClick={this.newClick}>New</button>
           <button type="button" style={sync_style} onClick={this.syncBackend} >Sync</button>
         </div>
