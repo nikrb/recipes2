@@ -57,24 +57,21 @@ app.post( '/api/recipes', (req, res) => {
       promises.push( p);
     } else {
       console.log( "replace recipe:", recipe);
-      const p =  new Promise( (resolve, reject) => {
+      const p = new Promise( (resolve, reject) => {
+        // we can't provide the _id field or mongo tries to change it
+        // even if the same and we get an error
+        const recipe_id = recipe._id;
+        delete recipe._id;
         db.collection( 'recipes').findOneAndReplace(
-          { _id: ObjectId( recipe._id)},
-          { created: recipe.created,
-            name : recipe.name,
-            ingredients: recipe.ingredients,
-            instructions: recipe.instructions
-          },
-          { projection: { _id:1, created:1, name:1, ingredients:1, instructions:1},
-            returnOriginal: false
-          }
+          { _id: ObjectId( recipe_id)},
+          recipe
         )
         .then( (result) => {
-          console.log( "udpate recipe result:", result);
+          // console.log( "udpate recipe result:", result);
           resolve( result.value);
         })
         .catch( (error) => {
-          console.log( "recipe update failed:", error);
+          console.error( "recipe update failed:", error);
           reject( error);
         });
       });
