@@ -74,17 +74,20 @@ export default class Recipe extends React.Component {
           item_id={ing.text} item_text={ing.text} deleteClicked={this.deleteClicked} />
       );
     });
+    const font_sizing = {
+      fontSize: "1em"
+    };
     return (
       <div>
         <div>
           <h2>{this.props.item_text}</h2>
         </div>
         <div>
-          <input type="text" value={this.state.name} placeholder="recipe name ..."
-            onChange={this.recipeNameChange} />
+          <input type="text" style={font_sizing} value={this.state.name}
+            placeholder="recipe name ..." onChange={this.recipeNameChange} />
         </div>
         <div>
-          <input type="text" value={this.state.ingredient_entry}
+          <input type="text" style={font_sizing} value={this.state.ingredient_entry}
             placeholder="Ingredient..." onChange={this.ingredientChange}
             onKeyUp={this.handleKeyUp}/>
         </div>
@@ -92,7 +95,9 @@ export default class Recipe extends React.Component {
           <ul>{ingredients}</ul>
         </div>
         <div>
-          <textarea onChange={this.instructionChange} value={this.state.instructions}></textarea>
+          <textarea style={font_sizing}
+            onChange={this.instructionChange} value={this.state.instructions}>
+          </textarea>
         </div>
       </div>
     );

@@ -23,8 +23,11 @@ class App extends Component {
     }
   };
   render = () => {
+    const app_style = {
+      fontSize: "1.5em"
+    };
     return (
-      <div className="App">
+      <div className="App" style={app_style}>
         <Router>
           <div>
             <div className="nav">
