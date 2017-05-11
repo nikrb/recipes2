@@ -75,8 +75,10 @@ export default class Recipe extends React.Component {
       );
     });
     const font_sizing = {
-      fontSize: "1em"
+      fontSize: "1em",
+      fontFamily: "sans-serif"
     };
+    const ta_style = { ...font_sizing, height: "8em", width:"100%"};
     return (
       <div>
         <div>
@@ -95,7 +97,7 @@ export default class Recipe extends React.Component {
           <ul>{ingredients}</ul>
         </div>
         <div>
-          <textarea style={font_sizing}
+          <textarea style={ta_style}
             onChange={this.instructionChange} value={this.state.instructions}>
           </textarea>
         </div>

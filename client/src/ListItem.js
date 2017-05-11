@@ -14,7 +14,7 @@ export default class ListItem extends React.Component {
     return (
       <li onClick={this.handleClick} >
         <a href='' onClick={this.deleteClicked} className="close_button">&#10060;</a>
-        {this.props.item_text}
+        &nbsp;{this.props.item_text}
       </li>
     );
   }

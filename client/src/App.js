@@ -24,7 +24,7 @@ class App extends Component {
   };
   render = () => {
     const app_style = {
-      fontSize: "1.5em"
+      fontSize: "1em"
     };
     return (
       <div className="App" style={app_style}>
