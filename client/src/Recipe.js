@@ -38,7 +38,10 @@ export default class Recipe extends React.Component {
   };
   addIngredient = () => {
     this.dirty = true;
-    this.setState( { ingredients: [...this.state.ingredients, {text: this.state.ingredient_entry}]});
+    this.setState( {
+      ingredients: [...this.state.ingredients, {text: this.state.ingredient_entry}],
+      ingredient_entry: ""
+    });
   };
   handleKeyUp = (e) => {
     switch( e.keyCode){
