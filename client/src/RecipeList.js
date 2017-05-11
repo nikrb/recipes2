@@ -12,13 +12,12 @@ export default class RecipeList extends React.Component {
   getRecipeList = () => {
     RecipeActions.getAll()
     .then( (results) => {
-      console.log( "recipe list loaded:", results);
+      console.log( "@getRecipeList: recipe list loaded:", results);
       const nl = results.filter( ( r) => { return typeof r.deleteme === "undefined"; });
       this.setState( {recipe_list: nl});
     });
   };
   componentWillMount = () => {
-    RecipeActions.syncBackend();
     this.getRecipeList();
     addEventListener( "recipe_update_complete", this.handleRecipeUpdateComplete);
   };
@@ -46,10 +45,10 @@ export default class RecipeList extends React.Component {
     const sel = this.state.recipe_list.filter( (recipe) => {
       return recipe.name === item_id;
     });
-    console.log( "delete recipe:", sel[0]);
+    console.log( "@deleteClicked: delete recipe:", sel[0]);
     RecipeActions.deleteRecipe( sel[0].name)
     .then( (res) => {
-      console.log( "recipe deleted response:", res);
+      console.log( "deleteClicked: recipe deleted response:", res);
       this.getRecipeList();
     });
   };
