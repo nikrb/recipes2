@@ -37,6 +37,9 @@ app.use( bodyParser.json());
 app.get( '/api/recipes', (req, res) => {
   db.collection( 'recipes').find( { deleteme : { $exists : false}}).sort( { name: 1})
   .toArray( function( err, items){
+    if( err){
+      console.log( "get recipes failed:", err);
+    }
     res.json( items);
   });
 });
