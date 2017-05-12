@@ -44,10 +44,10 @@ self.addEventListener('install', function(event) {
                 "api/recipes",
                 assets["main.js"],
                 assets["main.css"]
-              ]
-              cache.addAll(urlsToCache)
+              ];
+              cache.addAll(urlsToCache);
               console.log('cached');
-            })
+            });
         })
     );
   }
