@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "nodemon --watch server --exec babel-node -- server/server.js",
+    "server": "nodemon --watch server --exec babel-node -- ./server.js",
     "client": "babel-node start-client.js",
     "lint": "eslint ."
   },

@@ -18,7 +18,7 @@ MongoClient.connect(url, function(err, dbc) {
 });
 
 
-app.set('port', (process.env.PORT || 3001));
+app.set('port', (process.env.PORT || 8081));
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
