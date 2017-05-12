@@ -1,8 +1,11 @@
 .close_button {
   text-decoration: none;
   font-size: 0.7em;
+  padding: 2px;
 }
 
 .close_button:hover {
-  color:red;
+  color: white;
+  background-color: red;
+  border-radius: 100%;
 }
