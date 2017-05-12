@@ -22,6 +22,9 @@ cd client
 npm run build
 cd ..
 ```
+tweak build/service-worker.js doCache to true
+
+make sure node v6+, ```nvm use 6```
 
 * export PORT=8080 (already setup)
 * export NODE_ENV=production
