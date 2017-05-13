@@ -76,7 +76,8 @@ export default class Recipe extends React.Component {
     });
     const font_sizing = {
       fontSize: "1em",
-      fontFamily: "sans-serif"
+      fontFamily: "sans-serif",
+      width: "100%"
     };
     const ta_style = { ...font_sizing, height: "8em", width:"100%",
       // we need some space under the text area to grab the resize handle
