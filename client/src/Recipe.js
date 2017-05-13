@@ -107,6 +107,8 @@ export default class Recipe extends React.Component {
         </div>
         <div>
           Instructions:
+        </div>
+        <div>
           <textarea style={ta_style}
             onChange={this.instructionChange} value={this.state.instructions}>
           </textarea>
