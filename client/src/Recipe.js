@@ -78,7 +78,16 @@ export default class Recipe extends React.Component {
       fontSize: "1em",
       fontFamily: "sans-serif"
     };
-    const ta_style = { ...font_sizing, height: "8em", width:"100%"};
+    const ta_style = { ...font_sizing, height: "8em", width:"100%",
+      // we need some space under the text area to grab the resize handle
+      marginBottom: "20px",
+      marginTop: "10px"
+    };
+    const scrolly_box = {
+      maxHeight: "100px",
+      overflowY: "scroll",
+      marginBottom: "10px"
+    };
     return (
       <div>
         <div>
@@ -93,10 +102,11 @@ export default class Recipe extends React.Component {
             placeholder="Ingredient..." onChange={this.ingredientChange}
             onKeyUp={this.handleKeyUp}/>
         </div>
-        <div>
+        <div style={scrolly_box}>
           <ul>{ingredients}</ul>
         </div>
         <div>
+          Instructions:
           <textarea style={ta_style}
             onChange={this.instructionChange} value={this.state.instructions}>
           </textarea>
