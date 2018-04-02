@@ -15,20 +15,22 @@ class App extends Component {
       const ns = parseInt( size, 10);
       this.setState( { font_size: ns});
     }
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('service-worker.js').then(function(registration) {
-          // Registration was successful
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, function(err) {
-          // registration failed :(
-          console.log('ServiceWorker registration failed: ', err);
-        }).catch(function(err) {
-          console.log(err)
+    if (process.env.NODE_ENV === 'production') {
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+            // Registration was successful
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }, function(err) {
+            // registration failed :(
+            console.log('ServiceWorker registration failed: ', err);
+          }).catch(function(err) {
+            console.log(err)
+          });
         });
-      });
-    } else {
-      console.log('service worker is not supported');
+      } else {
+        console.log('service worker is not supported');
+      }
     }
   };
   smallerFont = () => {
