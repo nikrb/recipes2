@@ -10,7 +10,8 @@
     "mongodb": "^2.2.25"
   },
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "node server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon --watch server --exec babel-node -- ./server.js",
     "client": "babel-node start-client.js",
     "lint": "eslint ."
