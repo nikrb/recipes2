@@ -11,9 +11,10 @@ export default class ListItem extends React.Component {
     this.props.deleteClicked( this.props.item_id);
   };
   render = () => {
+    const cross = String.fromCharCode(0x2718);
     return (
       <li onClick={this.handleClick} >
-        <a href='' onClick={this.deleteClicked} className="close_button">&#10060;</a>
+        <a href='' onClick={this.deleteClicked} className="close_button">{cross}</a>
         &nbsp;{this.props.item_text}
       </li>
     );
